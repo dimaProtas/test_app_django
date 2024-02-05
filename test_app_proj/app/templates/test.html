@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{{survey.title}}{% endblock %}
+
+{% block content %}
+    <h1>{{ survey.title }}</h1>
+    <div>
+        <p>{{ question.text }}</p>
+        {% if question.result_data %}
+            <div style="border: 1px solid; padding: 10px; background-color: #20B2AA;">
+                {% for i in question.result_data %}
+                    <p>{{ i.question }} - Ваш ответ "
+                        {% if i.responce %}
+                            {{ i.responce }}
+                        {% else %}
+                            {{ i.choise_text }}
+                        {% endif %}
+                        " (На этот вопрос ответили  {{ i.users_count }}/{{ i.procent }}%) rank: {{ i.question_rank }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% csrf_token %}
+        {% if question.choices %}
+            {% for choise in question.choices %}
+                <article>{{ choise.text }}</article>
+                 <input id="choise_id" type="radio" name="choice" value="{{ choise }}">
+            {% endfor %}
+        {% elif question.question_index %}
+            <textarea id="text_value"></textarea>
+        {% endif %}
+    </div>
+    {% if question.question_index %}
+        <div>
+            <button onclick="saveQuestion('{{ question.survey_id }}', '{{ question.id }}', '{{ question.question_index }}')">Следующий вопрос</button>
+        </div>
+    {% endif %}
+    <script src="{% static 'js/save_test.js' %}"></script>
+{% endblock %}

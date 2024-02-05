@@ -1,0 +1,12 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Tests{% endblock %}
+
+{% block content %}
+<h1>Выбор теста</h1>
+{% for test in data %}
+    <div>
+        <a href="{% url 'questions' survey_id=test.id question_index=0 %}">{{ test.title }}</a>
+    </div>
+{% endfor %}
+{% endblock %}
